@@ -39,19 +39,21 @@ $$\boxed{S_1 = \frac{S_{total}(1-r)}{1-r^N}}$$
 ### 1.3 Participant Score Model
 
 For participant $j$ in epoch $i$, the activity score is:
-
-$$\text{Score}_{j,i} = w_{out} \cdot \text{TxnFeePaid}_{j,i} + w_{in} \cdot \text{TxnFeeInvolved}_{j,i}$$
+```math
+\text{Score}_{j,i} = w_{out} \cdot \text{TxnFeePaid}_{j,i} + w_{in} \cdot \text{TxnFeeInvolved}_{j,i}
+```
 
 The cumulative score evolves as:
-
-$$\text{CumulativeScore}_{j,i} = \sum_{k=1}^{i} \text{Score}_{j,k}$$
+```math
+\text{CumulativeScore}_{j,i} = \sum_{k=1}^{i} \text{Score}_{j,k}
+```
 
 ### 1.4 Reward Distribution
 
 The reward for participant $j$ in epoch $i$ is:
-
-$$\boxed{R_{j,i} = \frac{\text{CumulativeScore}_{j,i}}{\sum_{k=1}^{P_i} \text{CumulativeScore}_{k,i}} \cdot S_i}$$
-
+```math
+\boxed{R_{j,i} = \frac{\text{CumulativeScore}_{j,i}}{\sum_{k=1}^{P_i} \text{CumulativeScore}_{k,i}} \cdot S_i}
+```
 where $P_i$ is the number of participants in epoch $i$.
 
 ## 2. Analytical Solutions
@@ -98,28 +100,29 @@ where:
 ### 3.2 Transaction Activity Model
 
 For participant $j$ in epoch $i$, we model transaction counts as:
-
-$$\begin{align}
+```math
+\begin{align}
 \text{OutgoingTxns}_{j,i} &\sim \text{Poisson}(\lambda_{out}) \\
 \text{IncomingTxns}_{j,i} &\sim \text{Poisson}(\lambda_{in})
-\end{align}$$
-
+\end{align}
+```
 Transaction fees follow log-normal distributions:
-
-$$\begin{align}
+```math
+\begin{align}
 \text{TxnFee}_{j,i} &\sim \text{LogNormal}(\mu_{fee}, \sigma_{fee}^2)
-\end{align}$$
-
+\end{align}
+```
 ### 3.3 Score Distribution Analysis
 
 **Theorem 3**: Under the stochastic model, the expected score for participant $j$ in epoch $i$ is:
-
-$$\mathbb{E}[\text{Score}_{j,i}] = w_{out} \cdot \lambda_{out} \cdot e^{\mu_{fee} + \sigma_{fee}^2/2} + w_{in} \cdot \lambda_{in} \cdot e^{\mu_{fee} + \sigma_{fee}^2/2}$$
+```math
+\mathbb{E}[\text{Score}_{j,i}] = w_{out} \cdot \lambda_{out} \cdot e^{\mu_{fee} + \sigma_{fee}^2/2} + w_{in} \cdot \lambda_{in} \cdot e^{\mu_{fee} + \sigma_{fee}^2/2}
+```
 
 **Proof**: Using properties of Poisson and log-normal distributions:
-
-$$\mathbb{E}[\text{Score}_{j,i}] = w_{out} \cdot \mathbb{E}[\text{OutgoingTxns}_{j,i}] \cdot \mathbb{E}[\text{TxnFee}_{j,i}] + w_{in} \cdot \mathbb{E}[\text{IncomingTxns}_{j,i}] \cdot \mathbb{E}[\text{TxnFee}_{j,i}]$$
-
+```math
+$$\mathbb{E}[\text{Score}_{j,i}] = w_{out} \cdot \mathbb{E}[\text{OutgoingTxns}_{j,i}] \cdot \mathbb{E}[\text{TxnFee}_{j,i}] + w_{in} \cdot \mathbb{E}[\text{IncomingTxns}_{j,i}] \cdot \mathbb{E}[\text{TxnFee}_{j,i}]
+```
 Substituting the expectations and simplifying yields the result.
 
 ## 4. Discrete Dynamical System Analysis
@@ -127,9 +130,9 @@ Substituting the expectations and simplifying yields the result.
 ### 4.1 State Space Definition
 
 Define the system state at epoch $i$ as:
-
-$$\mathbf{x}_i = \begin{pmatrix} P_i \\ \mathbf{S}_i \\ \mathbf{R}_i \end{pmatrix}$$
-
+```math
+\mathbf{x}_i = \begin{pmatrix} P_i \\ \mathbf{S}_i \\ \mathbf{R}_i \end{pmatrix}
+```
 where:
 - $P_i$ is the participant count
 - $\mathbf{S}_i$ is the vector of cumulative scores
@@ -138,13 +141,13 @@ where:
 ### 4.2 Evolution Equations
 
 The system evolves according to:
-
-$$\begin{align}
+```math
+\begin{align}
 P_{i+1} &= P_i + G_i \\
 \mathbf{S}_{i+1} &= \mathbf{S}_i + \mathbf{A}_i \\
 \mathbf{R}_{i+1} &= \mathbf{R}_i + \frac{S_{i+1}}{||\mathbf{S}_{i+1}||_1} \mathbf{S}_{i+1}
-\end{align}$$
-
+\end{align}
+```
 where $\mathbf{A}_i$ represents the activity vector in epoch $i$.
 
 ### 4.3 Equilibrium Analysis
@@ -174,9 +177,9 @@ $$P(|R_j - \mathbb{E}[R_j]| > t) \leq 2\exp\left(-\frac{2t^2}{\sum_{k=1}^P \sigm
 ### 5.3 Inequality Measures
 
 The Gini coefficient for reward distribution in epoch $i$ is:
-
-$$G_i = \frac{1}{2P_i^2 \bar{R}_i} \sum_{j=1}^{P_i} \sum_{k=1}^{P_i} |R_{j,i} - R_{k,i}|$$
-
+```math
+G_i = \frac{1}{2P_i^2 \bar{R}_i} \sum_{j=1}^{P_i} \sum_{k=1}^{P_i} |R_{j,i} - R_{k,i}|
+```
 where $\bar{R}_i$ is the mean reward in epoch $i$.
 
 ## 6. Convergence Analysis
@@ -219,8 +222,9 @@ Model: $\lambda_{out,i+1} = \lambda_{out,i} + \beta \cdot R_{j,i}$
 $$\frac{\partial S_1}{\partial r} = \frac{S_{total}(1-r^N) - S_{total}(1-r)Nr^{N-1}}{(1-r^N)^2}$$
 
 **Weight Sensitivity**:
-$$\frac{\partial R_{j,i}}{\partial w_{out}} = \frac{S_i \cdot \text{TxnFeePaid}_{j,i} \cdot \sum_{k \neq j} \text{Score}_{k,i}}{(\sum_{k=1}^{P_i} \text{Score}_{k,i})^2}$$
-
+```math
+\frac{\partial R_{j,i}}{\partial w_{out}} = \frac{S_i \cdot \text{TxnFeePaid}_{j,i} \cdot \sum_{k \neq j} \text{Score}_{k,i}}{(\sum_{k=1}^{P_i} \text{Score}_{k,i})^2}
+```
 ### 8.2 Robustness Analysis
 
 **Theorem 10**: The system is robust to moderate parameter changes, with reward distributions changing continuously with parameter variations.
@@ -296,13 +300,15 @@ $$S_1 = \frac{2.1 \times 10^9 \times 0.1}{1 - 0.9^{25}} = \frac{2.1 \times 10^8}
 ### 12.1 Multi-Asset Extensions
 
 Extension to multiple token types:
-$$R_{j,i}^{(k)} = \frac{\text{Score}_{j,i}^{(k)}}{\sum_{l=1}^{P_i} \text{Score}_{l,i}^{(k)}} \cdot S_i^{(k)}$$
-
+```math
+R_{j,i}^{(k)} = \frac{\text{Score}_{j,i}^{(k)}}{\sum_{l=1}^{P_i} \text{Score}_{l,i}^{(k)}} \cdot S_i^{(k)}
+```
 ### 12.2 Dynamic Parameter Adjustment
 
 Adaptive deflation rates based on network conditions:
-$$r_{i+1} = r_i + \alpha \cdot (\text{target\_growth} - \text{actual\_growth})$$
-
+```math
+r_{i+1} = r_i + \alpha \cdot (\text{target\_growth} - \text{actual\_growth})
+```
 ## 13. Conclusion
 
 The Pneuma Protocol's reward distribution mechanism exhibits rich mathematical properties combining elements of geometric series, stochastic processes, and game theory. The system achieves several desirable properties:
