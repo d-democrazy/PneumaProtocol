@@ -61,27 +61,30 @@ This creates a linear relationship between collateralization and score amplifica
 ### 3.1 Raw Contract Score
 
 For contract $c$ in epoch $i$, the raw score is calculated as:
-
-$$\text{RawScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times W_{\text{base}}$$
-
-$$\text{RawScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times 0.25$$
-
+```math
+\text{RawScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times W_{\text{base}}
+```
+```math
+\text{RawScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times 0.25
+```
 ### 3.2 Amplified Contract Score
 
 The amplified score incorporates the collateralization effect:
-
-$$\text{AmplifiedScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times W_c$$
-
-$$\text{AmplifiedScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times (0.25 + (r_c \times 0.75))$$
-
+```math
+\text{AmplifiedScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times W_c
+```
+```math
+\text{AmplifiedScore}_{c,i} = \text{TxnFeeInvolved}_{c,i} \times (0.25 + (r_c \times 0.75))
+```
 ### 3.3 Cumulative Contract Score
 
 The cumulative score for contract $c$ through epoch $i$ is:
-
-$$\text{CumulativeScore}_{c,i} = \sum_{k=1}^{i} \text{AmplifiedScore}_{c,k}$$
-
-$$\text{CumulativeScore}_{c,i} = \sum_{k=1}^{i} \left[\text{TxnFeeInvolved}_{c,k} \times (0.25 + (r_{c,k} \times 0.75))\right]$$
-
+```math
+\text{CumulativeScore}_{c,i} = \sum_{k=1}^{i} \text{AmplifiedScore}_{c,k}
+```
+```math
+\text{CumulativeScore}_{c,i} = \sum_{k=1}^{i} \left[\text{TxnFeeInvolved}_{c,k} \times (0.25 + (r_{c,k} \times 0.75))\right]
+```
 Note: $r_{c,k}$ allows for collateralization changes between epochs.
 
 ## 4. Token Valuation Framework
@@ -150,15 +153,15 @@ $$\frac{dV_{t,i}}{dt} = \text{TxnFeeInvolved}_{c,i} \times W_c$$
 ### 6.2 Growth Through Collateralization
 
 Additional collateralization increases the amplification factor:
-
-$$\frac{dV_{t,i}}{dP_c} = \text{CumulativeScore}_{c,i} \times \frac{0.75}{S_{\text{PNEUMA}}}$$
-
+```math
+\frac{dV_{t,i}}{dP_c} = \text{CumulativeScore}_{c,i} \times \frac{0.75}{S_{\text{PNEUMA}}}
+```
 ### 6.3 Combined Growth Rate
 
 The total growth rate combines both mechanisms:
-
-$$\frac{dV_{t,i}}{dt} = \text{TxnFeeInvolved}_{c,i} \times W_c + \text{CumulativeScore}_{c,i} \times \frac{0.75}{S_{\text{PNEUMA}}} \times \frac{dP_c}{dt}$$
-
+```math
+\frac{dV_{t,i}}{dt} = \text{TxnFeeInvolved}_{c,i} \times W_c + \text{CumulativeScore}_{c,i} \times \frac{0.75}{S_{\text{PNEUMA}}} \times \frac{dP_c}{dt}
+```
 ## 7. Exchange Rate Calculations
 
 ### 7.1 Token-to-Token Exchange Rate
@@ -170,31 +173,31 @@ $$\text{Exchange Rate}_{A \to B} = \frac{V_A}{V_B}$$
 ### 7.2 PNEUMA-Denominated Pricing
 
 All token values are naturally expressed in PNEUMA terms:
-
-$$\text{Price}_{t,i} = \frac{V_{t,i}}{S_t} \text{ PNEUMA per token}$$
-
+```math
+\text{Price}_{t,i} = \frac{V_{t,i}}{S_t} \text{ PNEUMA per token}
+```
 ### 7.3 Cross-Token Valuation
 
 The relative value between any two tokens:
-
-$$\text{Relative Value}_{A,B} = \frac{V_A}{V_B} = \frac{\text{CumulativeScore}_{A}}{\text{CumulativeScore}_{B}}$$
-
+```math
+\text{Relative Value}_{A,B} = \frac{V_A}{V_B} = \frac{\text{CumulativeScore}_{A}}{\text{CumulativeScore}_{B}}
+```
 ## 8. Economic Implications
 
 ### 8.1 Collateral Efficiency
 
 The efficiency of collateralization depends on the contract's activity level:
-
-$$\text{Efficiency}_c = \frac{\text{CumulativeScore}_{c,i}}{P_c}$$
-
+```math
+\text{Efficiency}_c = \frac{\text{CumulativeScore}_{c,i}}{P_c}
+```
 Higher efficiency indicates better return on collateral investment.
 
 ### 8.2 Ecosystem Value Distribution
 
 The proportion of ecosystem value held by token $t$:
-
-$$\text{Value Share}_t = \frac{V_{t,i}}{\sum_{k=1}^{N} V_{k,i}}$$
-
+```math
+\text{Value Share}_t = \frac{V_{t,i}}{\sum_{k=1}^{N} V_{k,i}}
+```
 ### 8.3 Collateral Utilization
 
 The percentage of PNEUMA supply used for collateralization:
