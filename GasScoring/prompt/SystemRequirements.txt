@@ -1,0 +1,128 @@
+# Project structure
+```
+GasScoring/
+├── src/
+│   ├── cli/                      # CLI interface
+│   │   ├── index.ts              # Entry point
+│   │   ├── prompts.ts            # User input handling
+│   │   └── display.ts            # Terminal UI
+│   ├── core/                     # Core business logic
+│   │   ├── fetcher.ts            # Transaction fetching
+│   │   ├── watcher.ts            # Real-time monitoring
+│   │   ├── calculator.ts         # Gas score calculation
+│   │   └── metrics.ts            # Metrics generation
+│   ├── contracts/                # Blockchain interaction
+│   │   ├── sbt.ts                # SoulBound Token interface
+│   │   ├── abi/                  # Contract ABIs
+│   │   │   └── SoulBoundToken.json
+│   │   └── events.ts             # Event handling
+│   ├── api/                      # API server
+│   │   ├── server.ts             # Express setup
+│   │   ├── routes.ts             # API endpoints
+│   │   ├── auth.ts               # API key authentication
+│   │   └── webhooks.ts           # SBT minting webhooks
+│   ├── db/                       # Database operations
+│   │   ├── manager.ts            # File operations
+│   │   ├── models.ts             # Data models
+│   │   ├── mappings.ts           # SBT-address mappings
+│   │   └── updater.ts            # Database updates
+│   ├── utils/                    # Utilities
+│   │   ├── blockchain.ts           # Blockchain utilities
+│   │   ├── formatting.ts         # Data formatting
+│   │   ├── logger.ts             # Logging
+│   │   └── atomic.ts             # Atomic file operations
+│   ├── types/                    # Type definitions
+│   └── config/                   # Configuration
+├── Database/                     # File database
+│   ├── mappings/                 # SBT-address mappings
+│   │   └── index.json            # Quick lookup index
+│   └── scores/                   # Score data storage
+├── test/                         # Test files
+└── scripts/                      # Utility scripts
+```
+
+# Core Components
+1. SoulBound Token Integration
+- sbt.ts: Contract interaction for SBT validation and queries
+- mappings.ts: Maintains SBT-to-address and address-to-SBT mappings
+- webhooks.ts: Endpoints for SBT contract events
+
+2. Transaction Processing
+- fetcher.ts: Historical transaction fetching with pagination
+- watcher.ts: Real-time transaction monitoring using WebSocket/polling
+- calculator.ts: Score calculation with SBT metadata integration
+
+3. Database Management
+- manager.ts: CRUD operations for file-based storage
+- updater.ts: Atomic updates to prevent corruption
+- models.ts: Typed interfaces for database objects
+
+4. API Layer
+- server.ts: Express server with security middleware
+- routes.ts: Endpoints for score queries and admin operations
+- auth.ts: API key management and validation
+
+# Technology Stack
+1. Blockchain Interaction
+- ethers.js v6: Core blockchain interaction
+- WebSocket/HTTP fallback: Real-time monitoring with API key support
+- Event filtering: Efficient transaction filtering
+
+2. CLI & User Interface
+- prompts: Interactive CLI interface
+- chalk: Colored terminal output
+- cli-table3: Formatted data tables
+- ora: Loading spinners
+
+3. Data Management
+- fs-extra: Enhanced file operations
+- write-file-atomic: Atomic file updates
+- fast-json-stringify: Optimized JSON handling
+
+4. API & Authentication
+- express: API server framework
+- jsonwebtoken: Secure API key generation/verification
+- cors: Cross-origin resource control
+- helmet: Security headers
+- rate-limiter-flexible: Request limiting
+
+# Implementation Workflow
+1. Phase 1: Foundation & SBT Integration
+- Set up SBT contract interface
+- Create SBT-address mapping system
+- Implement blockchain connection with WebSocket/HTTP fallback
+- Build core transaction fetching mechanism
+
+2. Phase 2: Transaction Processing
+- Develop historical transaction retrieval
+- Implement real-time transaction monitoring
+- Create gas fee calculation engine
+- Build score calculation system with SBT metadata
+
+3. Phase 3: Database & Persistence
+- Implement atomic file operations
+- Create database models with validation
+- Build database update mechanisms
+- Implement SBT-address index maintenance
+
+4. Phase 4: CLI & API
+- Build interactive CLI with address/SBT input
+- Create real-time display with transaction updates
+- Implement API server with authentication
+- Add webhook endpoints for SBT events
+
+# Data Flow
+- CLI inputs SBT ID or address once SBT is minted
+- System resolves SBT-address mapping
+- Historical transactions are fetched and processed
+- Initial score is calculated and displayed
+- WebSocket connection monitors new transactions
+- New transactions update score and database
+- API provides access to current data
+
+# Security Considerations
+- API keys stored as secure hashes
+- Rate limiting on all endpoints
+- Atomic file operations for database integrity
+- Input validation for all user/external inputs
+- Environment variable security for RPC keys

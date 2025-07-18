@@ -1,0 +1,44 @@
+Foundational Steps
+
+1. Create Configuration Files
+First, let's set up the configuration system to load environment variables from .env.local:
+
+# Create src/config/env.ts
+This file will load and validate environment variables, making them available throughout the application:
+- Load variables from .env.local
+- Validate required variables are present
+- Define type-safe interfaces for configuration
+- Export configuration object
+
+2. Define Core Type Definitions
+
+Create src/types/index.ts
+# Create basic type definitions for:
+- Blockchain interaction data types
+- Score calculation models
+- Database schema interfaces
+- SBT integration types
+
+3. Set Up SBT Contract Interface
+
+# Create src/contracts/abi/SoulBoundToken.json
+- Define the ABI for SoulBound Token contract
+# Create src/contracts/sbt.ts
+- Create contract instance
+- Define functions to interact with SBT contract
+- Set up event listeners for SBT minting
+
+4. Create Database Management System
+# Create src/db/models.ts
+- Define interfaces for database records
+- Create validation functions
+
+# Create src/db/manager.ts
+- Implement atomic read/write operations
+- Create functions for database access
+
+5. Set Up Basic CLI Entry Point
+# Create src/cli/index.ts
+- Define the main CLI entry point
+- Create the welcome screen
+- Set up address input prompt

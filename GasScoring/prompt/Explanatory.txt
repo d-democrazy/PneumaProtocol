@@ -1,0 +1,202 @@
+Let me explain the `GasScoring` project:
+`GasScoring` is a CLI tool and transaction watcher to track and analyze gas fees spent by Core blockchain address or contract address. It works together with SoulBound Token contract. It tracks transaction from block 0 to `n` block as shown in example below
+```
+? Please enter a Core address:  › 0xf9C945Fe04b718f0eDEA6a7eD450b54cd748AC12 // automatically input the associated owner's address once SoulBound Token is minted and run immediately.
+```
+
+on run
+```
+✔ Please enter a Core address:  … 0xf9C945Fe04b718f0eDEA6a7eD450b54cd748AC12
+
+📊 Processing transactions for 0xf9C945Fe04b718f0eDEA6a7eD450b54cd748AC12...
+
+Fetching transactions starting from block 0...
+Fetching page 1 for new transactions...
+Fetched 100 txs (Total: 100)
+Fetching page 2 for new transactions...
+Fetched 100 txs (Total: 200)
+Fetching page 3 for new transactions...
+Fetched 100 txs (Total: 300)
+etc.
+```
+
+once fetching is completed, it refreshes, then shows the metric, and then watches immediately
+```
+🔗 Explorer Link
+View address on explorer: https://scan.test2.btcs.network/address/0xf9c945fe04b718f0edea6a7ed450b54cd748ac12
+
+┌───────────────────────┬────────────────────┬────────────────────────┐
+│ Metric                │ Value (TxnFeePaid) │ Value (TxnFeeInvolved) │
+├───────────────────────┼────────────────────┼────────────────────────┤
+│ Total Transactions    │         90         │           31           │
+├───────────────────────┼────────────────────┼────────────────────────┤
+│ Total Gas Fees (CORE) │     0.4069401      │        0.02394         │
+├───────────────────────┼────────────────────┴────────────────────────┤
+│ Score                 │                 0.41292510                  │
+└───────────────────────┴─────────────────────────────────────────────┘
+// Value (TxnFeePaid) is the transaction gasfee paid by the address or outgoing transaction
+// Value (TxnFeeInvolved) is the transaction gasfee the address involved or incoming transaction
+// Total Gas Fees (CORE) is the accumulation of gasfee of either incoming transaction or outgoing transaction in ether
+// The Score formula is `TxnFeePaid + (TxnFeeInvolved * 0.25)` 
+
+
+👀 Watching for new transactions...
+Press Ctrl+C to stop watching and exit
+```
+
+anytime transaction occurs updates the metrics and shows the transaction gas summary
+```
+🔗 Explorer Link
+View address on explorer: https://scan.test2.btcs.network/address/0xf9c945fe04b718f0edea6a7ed450b54cd748ac12
+
+┌───────────────────────┬────────────────────┬────────────────────────┐
+│ Metric                │ Value (TxnFeePaid) │ Value (TxnFeeInvolved) │
+├───────────────────────┼────────────────────┼────────────────────────┤
+│ Total Transactions    │         91         │           31           │
+├───────────────────────┼────────────────────┼────────────────────────┤
+│ Total Gas Fees (CORE) │     0.41214418     │        0.02394         │
+├───────────────────────┼────────────────────┴────────────────────────┤
+│ Score                 │                 0.41812918                  │
+└───────────────────────┴─────────────────────────────────────────────┘
+
+👀 Watching for new transactions...
+Press Ctrl+C to stop watching and exit
+
+🔔 New transaction detected in block 5307154:
+Direction: OUT
+Transaction Hash: 0x5dd8ada223577904448e4134123dd77ef811f9af2d0304c41b8673f2b772eafd
+From: 0xf9C945Fe04b718f0eDEA6a7eD450b54cd748AC12
+To: 0xaBfC1162999DAEa5962c64537aEC40388d6980cD
+Value: 0.0 CORE
+Gas Used: 148688
+Gas Fee: 0.00520408 CORE
+View transaction: https://scan.test2.btcs.network/tx/0x5dd8ada223577904448e4134123dd77ef811f9af2d0304c41b8673f2b772eafd
+```
+Instead of making new line when transaction occurs, it updates the metrics and the receipt to avoid unnecessary monitoring display.
+
+I also need database with this structure
+```
+GasScoring // The project root
+├─ Database
+│  ├─ {SoulBoundTokenId_address}.json
+│  ├─ {SoulBoundTokenId_address}.json
+│  ├─ {SoulBoundTokenId_address}.json
+│  ├─ etc.
+│  ├─ TotalScore.json
+├─ src
+├─ test
+├─ // others
+```
+
+The `{SoulBoundTokenId_address}.json` example format
+```
+{
+  "name": "Gas Score - 0xf9c945fe04b718f0edea6a7ed450b54cd748ac12",
+  "description": "A SoulBound Token that tracks the gas efficiency and network activity score of this address.",
+  "image": "ipfs://QmImageHashHere",
+  "external_url": "https://yourdomain.com/score/0xf9c945fe04b718f0edea6a7ed450b54cd748ac12",
+  "registryVersion": "1.0.0",
+  "chainId": 1114,
+  "address": "0xf9c945fe04b718f0edea6a7ed450b54cd748ac12",
+  "updatedAt": "2025-06-05T11:48:28.169Z",
+  "score": {
+    "individualScore": 0.41812918000000004,
+    "totalScore": 0.41812918000000004,
+    "percentile": "0.0%",
+    "rank": 1
+  },
+  "attributes": [
+    {
+      "trait_type": "Individual Score",
+      "value": 0.41812918000000004
+    },
+    {
+      "trait_type": "Total Score",
+      "value": 0.41812918000000004
+    },
+    {
+      "trait_type": "Score Percentile",
+      "value": "0.0%"
+    },
+    {
+      "trait_type": "Rank",
+      "value": 1
+    },
+    {
+      "trait_type": "Chain",
+      "value": "Core (1114)"
+    },
+    {
+      "trait_type": "Last Updated",
+      "value": "2025-06-05T11:48:28.169Z"
+    }
+  ]
+}
+```
+
+The `TotalScore.json` example format
+```
+{
+  "name": "Gas Score Registry",
+  "description": "Aggregated total gas activity score across all addresses tracked by the GasMonitor system.",
+  "registryVersion": "1.0.0",
+  "chainId": 1114,
+  "updatedAt": "2025-06-05T11:48:28.177Z",
+  "totalScore": 0.41812918000000004,
+  "totalAddresses": 1,
+  "topAddress": {
+    "address": "0xf9c945fe04b718f0edea6a7ed450b54cd748ac12",
+    "score": 0.41812918000000004
+  },
+  "averageScore": 0.41812918000000004,
+  "scoreDistribution": {
+    "min": 0.41812918000000004,
+    "max": 0.41812918000000004,
+    "median": 0.41812918000000004,
+    "percentiles": {
+      "10": 0.41812918000000004,
+      "25": 0.41812918000000004,
+      "50": 0.41812918000000004,
+      "75": 0.41812918000000004,
+      "90": 0.41812918000000004
+    }
+  },
+  "attributes": [
+    {
+      "trait_type": "Total Score",
+      "value": 0.41812918000000004
+    },
+    {
+      "trait_type": "Tracked Addresses",
+      "value": 1
+    },
+    {
+      "trait_type": "Average Score",
+      "value": 0.41812918000000004
+    },
+    {
+      "trait_type": "Highest Score",
+      "value": 0.41812918000000004
+    },
+    {
+      "trait_type": "Updated At",
+      "value": "2025-06-05T11:48:28.177Z"
+    }
+  ]
+}
+```
+
+On `{SoulBoundTokenId_address}.json` and `TotalScore.json`, we need to override the old data with the latest data to avoid storage inefficiency.
+
+I already have `.env.local` file set:
+```
+RPC_URL=https://rpc.test2.btcs.network
+ENDPOINT_URL=https://api.test2.btcs.network/api
+EXPLORER=https://scan.test2.btcs.network
+API_KEY=my_api_key
+API_PORT=3000
+```
+
+Because we have database here, this project must have ability to generate API key for data request.
+
+In this development plan we discuss what approach and method suitable for this project. Also, please asses this project plan if you have better design especially with the database.
