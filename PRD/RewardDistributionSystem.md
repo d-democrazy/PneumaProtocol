@@ -62,7 +62,9 @@ This yields approximate allocations such as:
 
 For each wallet $j$, the score in epoch $i$ is calculated as:
 
-$$\text{Score}_{j,i} = \text{TxnFeePaid}_{j,i} + 0.25 \times \text{TxnFeeInvolved}_{j,i}$$
+```math
+\text{Score}_{j,i} = \text{TxnFeePaid}_{j,i} + 0.25 \times \text{TxnFeeInvolved}_{j,i}
+```
 
 where:
 - $\text{TxnFeePaid}_{j,i}$ = gas fees paid by wallet $j$ for transactions it initiates in epoch $i$
@@ -72,7 +74,9 @@ where:
 
 The **cumulative lifetime score** for wallet $j$ at the end of epoch $i$ is:
 
-$$\text{CumulativeScore}_{j,i} = \sum_{k=1}^{i} \text{Score}_{j,k}$$
+```math
+\text{CumulativeScore}_{j,i} = \sum_{k=1}^{i} \text{Score}_{j,k}
+```
 
 This represents the total accumulated contribution of wallet $j$ from epoch 1 through epoch $i$.
 
@@ -80,7 +84,9 @@ This represents the total accumulated contribution of wallet $j$ from epoch 1 th
 
 Within each epoch $i$, each wallet $j$ earns:
 
-$$\text{Reward}_{j,i} = \frac{\text{CumulativeScore}_{j,i}}{\sum_{k=1}^{P_i} \text{CumulativeScore}_{k,i}} \times S_i$$
+```math
+\text{Reward}_{j,i} = \frac{\text{CumulativeScore}_{j,i}}{\sum_{k=1}^{P_i} \text{CumulativeScore}_{k,i}} \times S_i
+```
 
 where:
 - $\text{CumulativeScore}_{j,i}$ is wallet $j$'s cumulative lifetime score through epoch $i$
@@ -213,19 +219,25 @@ $$T_i = T_1 + \sum_{k=2}^{i} \Delta T_k$$
 $$\text{Score}_{j,i} = f_i \times T_i \times \left(\frac{3}{8} + 0.25 \times \frac{5}{8}\right) = f_i \times T_i \times \frac{3 + 1.25}{8} = f_i \times T_i \times 0.53125$$
 
 **Cumulative score through epoch $i$**:
-$$\text{CumulativeScore}_{j,i} = \sum_{k=1}^{i} \text{Score}_{j,k} = \sum_{k=1}^{i} (f_k \times T_k \times 0.53125)$$
+```math
+\text{CumulativeScore}_{j,i} = \sum_{k=1}^{i} \text{Score}_{j,k} = \sum_{k=1}^{i} (f_k \times T_k \times 0.53125)
+```
 
 **Total participants in epoch $i$**:
 $$P_i = P_1 + \sum_{k=2}^{i} \Delta P_k = 500 + \sum_{k=2}^{i} \Delta P_k$$
 
 **Reward for epoch $i$**:
-$$\text{Reward}_{j,i} = \frac{\text{CumulativeScore}_{j,i}}{\text{NetworkCumulativeScore}_i} \times S_i$$
+```math
+\text{Reward}_{j,i} = \frac{\text{CumulativeScore}_{j,i}}{\text{NetworkCumulativeScore}_i} \times S_i
+```
 
 where $S_i = 226{,}241{,}857 \times 0.9^{i-1}$ is the epoch allocation.
 
 **General Network Score Estimation**:
 If we assume all participants follow similar patterns:
-$$\text{NetworkCumulativeScore}_i \approx P_i \times \text{CumulativeScore}_{j,i}$$
+```math
+\text{NetworkCumulativeScore}_i \approx P_i \times \text{CumulativeScore}_{j,i}
+```
 
 ## 6. Key Properties
 
