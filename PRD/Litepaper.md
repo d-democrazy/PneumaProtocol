@@ -118,7 +118,7 @@ where $i$ represents the epoch number. This progression ensures:
 
 Each participant's reward for epoch $i$ is calculated as:
 
-$${Reward}_{j,i} = \frac{\text{Score}_{j,i}}{\sum_{k} \text{Score}_{k,i}} \times S_i$$
+$$\text{Reward}_{j,i} = \frac{\text{Score}_{j,i}}{\sum_{k} \text{Score}_{k,i}} \times S_i$$
 
 where:
 - $\text{Score}_{j,i}$ represents the cumulative lifetime score of participant $j$ at the end of epoch $i$
