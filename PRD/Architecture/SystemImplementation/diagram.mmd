@@ -1,0 +1,94 @@
+graph TD
+    %% Network Activity Layer
+    A[Blockchain Network Activity] --> B[Transaction Processing]
+    B --> C[Gas Fee Collection]
+    C --> D{Transaction Type}
+    
+    D --> E[TxnFeePaid<br/>Weight: 1.0]
+    D --> F[TxnFeeInvolved<br/>Weight: 0.25]
+    
+    %% Score Calculation Layer
+    E --> G[Individual Wallet Score Calculation]
+    F --> G
+    F --> H[Contract Score Calculation]
+    
+    G --> I["Score = TxnFeePaid + 0.25 × TxnFeeInvolved"]
+    H --> J["RawScore = TxnFeeInvolved × 0.25"]
+    
+    %% Collateralization System
+    K[PNEUMA Token Supply<br/>2.1B Fixed] --> L[Collateralization Pool]
+    L -->     M["Lock Function<br/>lockFor contract amount"]
+    M --> N["Collateralization Ratio<br/>r = P_c / S_PNEUMA"]
+    
+    N -->     O["Weight Amplification<br/>W_c = 0.25 + r_c × 0.75"]
+    O -->     P["Amplified Score<br/>AmplifiedScore = TxnFeeInvolved × W_c"]
+    
+    J --> P
+    
+    %% Cumulative Scoring
+    I --> Q[Cumulative Lifetime Score]
+    P --> R[Cumulative Contract Score]
+    
+    Q -->     S["CumulativeScore_j,i = Sum from k=1 to i Score_j,k"]
+    R -->     T["CumulativeScore_c,i = Sum from k=1 to i AmplifiedScore_c,k"]
+    
+    %% Epoch System
+    U[25 Epochs × 4 Years Each] --> V[Deflationary Allocation]
+    V -->     W["S_1 = 226M PNEUMA<br/>S_i = S_1 × 0.9^i-1"]
+    
+    %% Reward Distribution
+    S --> X[Network Total Cumulative Score]
+    X --> Y[Reward Calculation]
+    W --> Y
+    Y -->     Z["Reward_j,i = CumulativeScore_j,i / NetworkTotal × S_i"]
+    
+    %% Token Valuation
+    T --> AA[Token Valuation]
+    AA --> BB["V_t,i = CumulativeScore_c,i"]
+    BB --> CC[Per-Token Value<br/>V_per-token = V_t,i / S_t]
+    
+    %% Exchange System
+    CC --> DD[Token Exchange Rates]
+    DD -->     EE["Rate_A to B = V_A / V_B"]
+    
+    %% Constraints
+    FF[Ecosystem Constraints] -->     GG["Sum V_t,i ≤ 2.1B PNEUMA"]
+    BB --> GG
+    
+    %% LaunchPad Integration
+    HH[LaunchPad Platform] --> II[Token Registration]
+    HH --> JJ[Collateral Management]
+    HH --> KK[Valuation Monitoring]
+    
+    II --> M
+    JJ --> L
+    KK --> BB
+    
+    %% Time Flow
+    LL[Time Progression] --> MM[Epoch Transition]
+    MM --> NN[Score Reset: NO<br/>Cumulative: YES]
+    MM --> OO[New Allocation Calculation]
+    
+    NN --> Q
+    NN --> R
+    OO --> W
+    
+    %% Value Growth Dynamics
+    PP[Growth Mechanisms] --> QQ[Utility Growth<br/>↑ Contract Activity]
+    PP --> RR[Collateral Growth<br/>↑ PNEUMA Locked]
+    
+    QQ --> H
+    RR --> N
+    
+    %% Styling
+    classDef rewardSystem fill:
+    classDef valuationSystem fill:
+    classDef collateralization fill:
+    classDef epochSystem fill:
+    classDef constraints fill:
+    
+    class A,B,C,D,E,F,G,H,I,J,Q,R,S,T,X,Y,Z rewardSystem
+    class AA,BB,CC,DD,EE valuationSystem
+    class K,L,M,N,O,P collateralization
+    class U,V,W,LL,MM,NN,OO epochSystem
+    class FF,GG constraints
